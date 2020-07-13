@@ -1,4 +1,6 @@
 package studentskills.operation;
 
-public class Operation {
+public enum Operation {
+	INSERT,
+	MODIFY
 }
