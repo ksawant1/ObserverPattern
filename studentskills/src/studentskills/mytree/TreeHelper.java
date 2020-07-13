@@ -1,124 +1,209 @@
 package studentskills.mytree;
+import studentskills.operation.Operation;
 
-
-import javax.swing.*;
-import java.util.ArrayList;
-import java.util.List;
-
+/**
+ * Tree Helper usually calls the Tree methods recursively based op update or insert methods
+ */
 public class TreeHelper {
-	private List<Observer> observers = new ArrayList<Observer>();
-	/* Class containing left and right child of current node and key value*/
-	class Node implements SubjectI,Observer {
-		int key;
-		StudentRecord record;
-		Node left, right;
 
-		public Node(int item,StudentRecord value) {
-			key = item;
-			record= value;
-			left = right = null;
-		}
+	//nodes for every tree
+	StudentRecord record0,record1,record2;
 
-		@Override
-		public void update() {
-
-		}
-
-		@Override
-		public void register(Observer o) {
-
-		}
-
-		@Override
-		public void unregister(Observer o) {
-
-		}
-
-		@Override
-		public void notifyObserver() {
-
-		}
-	}
-	// Root of BST
-	Node root,root1,root2;
+	// the three instances of class tree
+	Tree<Integer, StudentRecord> tree0,tree1,tree2;
 
 
 	// Constructor
 	public TreeHelper() {
-		root = null;
+		tree0=new Tree();
+		tree1=new Tree();
+		tree2=new Tree();
+
 	}
 
-	// This method mainly calls insertRec()
-	public void insert(StudentRecord value) throws CloneNotSupportedException {
+	/**
+	 * finds the bnumber in corresponding tree and updates with given values if present
+	 * else prepares two copies and inserts in correspondig trees
+	 * @param value
+	 * @param operation
+	 * @throws CloneNotSupportedException
+	 * @throws NullPointerException
+	 */
+	public void insert( StudentRecord value, Operation operation) throws CloneNotSupportedException, NullPointerException {
 
-		StudentRecord record1 = (StudentRecord) value.clone();
-		StudentRecord record2 = (StudentRecord) value.clone();
-		root = insertRec(root, value);
-		root1=insertRec(root1,record1);
-		root2=insertRec(root2,record2);
-	}
+		    // to find if bnumber exists in tree 0
+			if ((tree0.getValue(value.bnumber) != null)) {
+				StudentRecord record = tree0.getValue(value.bnumber);
+				//updates values in tree 0
+				if (record != null) {
 
-	/* A recursive function to insert a new key in BST */
-	Node insertRec(Node root, StudentRecord value) {
+					record.firstname=value.firstname;
+					record.lastname=value.lastname;
+					record.major=value.major;
+					record.gpa=value.gpa;
+					record.getSkills().addAll(value.skills);
 
-		int key=value.bnumber;
-		/* If the tree is empty, return a new node */
-		if (root == null) {
-			root = new Node(key,value);
-			return root;
+
+				}
+
+				//notifies tree 1,2
+				record0.notifyObserver(value, operation);
+			}
+
+			// to find if bnumber exists in tree 1
+			else if ((tree1.getValue(value.bnumber) != null)) {
+				StudentRecord record = tree1.getValue(value.bnumber);
+				//updates values in tree 1
+				if (record != null) {
+
+					record.firstname=value.firstname;
+					record.lastname=value.lastname;
+					record.major=value.major;
+					record.gpa=value.gpa;
+					record.getSkills().addAll(value.skills);
+					//tree1.inorder();
+
+
+				}
+				//notifies tree 0,2
+				record1.notifyObserver(value, operation);
+			}
+
+			// to find if bnumber exists in tree 2
+			else if ((tree2.getValue(value.bnumber) != null)) {
+				//finds bnumber
+				StudentRecord record = tree2.getValue(value.bnumber);
+				//updates values in tree 2
+				if (record != null) {
+
+					record.firstname=value.firstname;
+					record.lastname=value.lastname;
+					record.major=value.major;
+					record.gpa=value.gpa;
+					record.getSkills().addAll(value.skills);
+					tree2.inorder();
+
+
+				}
+				//notifies tree 0,1
+				record2.notifyObserver(value, operation);
+
+			}
+			else if((tree0.getValue(value.bnumber) == null) && (tree1.getValue(value.bnumber) == null) && (tree2.getValue(value.bnumber) == null)){
+				//original node
+				record0 = value;
+
+				//clone the original replica twice
+				record1 = (StudentRecord) value.clone();
+				record2 = (StudentRecord) value.clone();
+
+				//register the listeners for original replica
+				record0.register(record1);
+				record0.register(record2);
+
+				//register the listeners for replica 1
+				record1.register(record0);
+				record1.register(record2);
+
+				//register the listeners for replica 2
+				record2.register(record0);
+				record2.register(record1);
+
+				//insert in every tree
+				tree0.insertNode(record0.bnumber, record0);
+				tree1.insertNode(record1.bnumber, record1);
+				tree2.insertNode(record2.bnumber, record2);
+
+
+
+			}
+
 		}
 
-		/* Otherwise, recur down the tree */
-		if (key < root.record.bnumber) {
-			root.left = insertRec(root.left, value);
-		}
-		else if (key > root.record.bnumber)
-			root.right = insertRec(root.right, value);
-		else if (key == root.record.bnumber) {
-			root.record.bnumber = value.bnumber;
-			root.record.firstname = value.firstname;
-			root.record.lastname=value.lastname;
-			root.record.gpa=value.gpa;
-			root.record.major=value.major;
-			root.record.skills.add(String.valueOf(value.skills));
 
-		}
+	/**
+	 * prints trees in asecnding order of their b-numbers
+	 */
+	public void printInOrder(){
+		tree0.inorder();
+		tree1.inorder();
+		tree2.inorder();
 
-		/* return the (unchanged) node pointer */
-		return root;
-	}
-	public void searchrec(int key) {
-
-		root = search(root, key);
-		System.out.println(root.record);
-	}
-	// A utility function to search a given key in BST
-	public Node search(Node root, int key)
-	{
-		// Base Cases: root is null or key is present at root
-		if (root==null || root.record.bnumber==key)
-			return root;
-
-		// val is greater than root's key
-		if (root.record.bnumber > key)
-			return search(root.left, key);
-
-		// val is less than root's key
-		return search(root.right, key);
 	}
 
+	/**
+	 * finds bnumber in given replica id's tree and updates replaces the old value with the new
+	 * notifies other trees to update their values
+	 * @param replicaid
+	 * @param bnumber
+	 * @param oldval
+	 * @param newval
+	 * @param operation
+	 * @throws CloneNotSupportedException
+	 * @throws NullPointerException
+	 */
 
-	// This method mainly calls InorderRec()
-	public void inorder() {
-		inorderRec(root);
-	}
+	public void modify( int replicaid,int bnumber,String oldval, String newval, Operation operation) throws CloneNotSupportedException, NullPointerException{
+		// based on replica id switches case
+		switch (replicaid) {
+			// find if present in tree and update
+	        case 0:
+		        System.out.println("hi");
+		        System.out.println(tree0.getValue(bnumber));
+		        if ((tree0.getValue(bnumber) != null)) {
+			        System.out.println("hi");
+			        StudentRecord record = tree0.getValue(bnumber);
+			        System.out.println(record);
+			        if (record.firstname == oldval)
+				        record.firstname = newval;
+			        else if (record.lastname == oldval)
+				        record.lastname = newval;
+			        else if (record.major == oldval)
+				        record.major = newval;
+			        else if (record.skills.contains(oldval)) {
+				        record.skills.remove(oldval);
+				        record.skills.add(newval);
+			        }
 
-	// A utility function to do inorder traversal of BST
-	void inorderRec(Node root) {
-		if (root != null) {
-			inorderRec(root.left);
-			System.out.println(root.record);
-			inorderRec(root.right);
-		}
-	}
-}
+		        }
+		        tree0.inorder();
+		        break;
+
+		        //value.notifyObserver(value, operation);
+	        case 1:
+		        if ((tree1.getValue(bnumber) != null)) {
+			        StudentRecord record = tree1.getValue(bnumber);
+
+			        if (record.firstname == oldval)
+				        record.firstname = newval;
+			        else if (record.lastname == oldval)
+				        record.lastname = newval;
+			        else if (record.major == oldval)
+				        record.major = newval;
+			        else if (record.skills.contains(oldval)) {
+				        record.skills.remove(oldval);
+				        record.skills.add(newval);
+			        }
+			        break;
+
+		        }
+	        case 2:
+		        if ((tree2.getValue(bnumber) != null)) {
+			        StudentRecord record = tree2.getValue(bnumber);
+			        if (record.firstname == oldval )
+				        record.firstname=newval;
+			        else if (record.lastname == oldval )
+				        record.lastname=newval;
+			        else if (record.major == oldval )
+				        record.major=newval;
+			        else if (record.skills.contains(oldval)) {
+				        record.skills.remove(oldval);
+				        record.skills.add(newval);
+			        }
+
+		        }
+		        break;
+
+
+
+        }}}
