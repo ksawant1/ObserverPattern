@@ -10,14 +10,12 @@ public class Helper {
 	TreeHelper treehelper = new TreeHelper();
 	/**
 	 * Helper is a utility that performs the operations for inserting, and modifying nodes into tree
-	 *
 	 * @author Krupa Sawant
 	 */
 		public Helper(){
 		}
 		static {
 		}
-
 	/**
 	 *
 	 * @param inputLine
@@ -25,38 +23,27 @@ public class Helper {
 	 * @throws IOException
 	 * @throws CloneNotSupportedException
 	 */
-
 		public void printOutput(String inputLine, String operationString) throws IOException, CloneNotSupportedException {
-
 			Operation operation = Operation.valueOf(operationString);
 			switch (operation) {
 				case INSERT:
 					insertInTree(inputLine,operation);
 					break;
-
 				case MODIFY:
 					modifyTree(inputLine,operation);
 					break;
-
 				default:
 					throw new IllegalArgumentException("invalid input format or file is empty");
-
 			}
-
 		}
-
 	/**
-	 *
 	 * @param inputLine
 	 * @param operation
 	 * @throws IOException
 	 */
-
 		public void insertInTree(String inputLine,Operation operation) throws IOException {
-
 			StringBuilder result = new StringBuilder();
 			String newLine = System.getProperty("line.separator");
-
 			try {
 				Set<String> hash_Set
 						= new HashSet<String>();
@@ -69,9 +56,7 @@ public class Helper {
 				String major=(inputs[1].split(",")[3]);
 				for(int i=4; i<9;i++){
 					hash_Set.add(inputs[1].split(",")[i]);
-
 				}
-
 				StudentRecord record= new StudentRecord(bnumber,fname,lname,gpa,major,hash_Set);
 				treehelper.insert(record,operation);
 				//tree.inorder();
@@ -84,8 +69,6 @@ public class Helper {
 			}catch(NumberFormatException | CloneNotSupportedException ex) {
 				throw new NumberFormatException("enter an integer value");
 			}
-
-
 		}
 		/**
 		 * decides whether the ad should be approved or rejected for every video based on given length
@@ -111,4 +94,3 @@ public class Helper {
 					'}';
 		}
 	}
-
