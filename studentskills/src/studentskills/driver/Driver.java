@@ -22,7 +22,7 @@ public class Driver {
 		 * argument value is not given java takes the default value specified in
 		 * build.xml. To avoid that, below condition is used
 		 */
-		if ((args.length != 2) || (args[0].equals("${input}")) || (args[1].equals("${output}"))) {
+		if ((args.length != 6) || (args[0].equals("${input}")) || (args[1].equals("${modify}")) || (args[2].equals("${out1}")) || (args[3].equals("${out2}")) || (args[4].equals("${out3}")) || (args[5].equals("${error}"))) {
 			System.err.printf("Error: Incorrect number of arguments. Program accepts %d arguments.", REQUIRED_NUMBER_OF_CMDLINE_ARGS);
 			System.exit(0);
 		}
@@ -30,33 +30,57 @@ public class Driver {
 		//inputs a string line and passes it to helper class
 
 		TreeHelper tree = new TreeHelper();
+		FileProcessor fpinput = new FileProcessor(args[0]);
+		File file = new File(args[0]);
+		//Results resultw= new Results();
+		Helper helper = new Helper();
+		boolean empty = file.exists() && file.length() == 0;
+		if (empty == true)
+			System.out.println("emptystring");
 
+		while (true) {
+			String line = fpinput.poll();
+			String operation = "INSERT";
 
-			System.out.println("Hello World! Lets get started with the assignment");
-			FileProcessor fpinput= new FileProcessor(args[0]);
-			File file = new File(args[0]);
-			//Results resultw= new Results();
-			Helper helper= new Helper();
-			boolean empty = file.exists() && file.length() == 0;
-			if(empty==true)
-				System.out.println("emptystring");
-
-			while (true) {
-				String line = fpinput.poll();
-				String operation="INSERT";
-
-				if (line == null) {
-
-					break;
-				}
-				if (line != null)
-					helper.printOutput(line,operation);
-
-				//resultw.writeToFile();
-				//resultw.writeToStdout();
+			if (line == null) {
+				tree.printInOrder();
+				break;
 			}
+			if (line != null)
+				helper.printOutput(line, operation);
+
+			//resultw.writeToFile();
+			//resultw.writeToStdout();
+		}
 
 
+		TreeHelper tree1 = new TreeHelper();
+		FileProcessor fpmodify = new FileProcessor(args[1]);
+		File file1 = new File(args[1]);
+		//Results resultw= new Results();
+		Helper helper1 = new Helper();
+		boolean empty1 = file1.exists() && file1.length() == 0;
+		if (empty1 == true)
+			System.out.println("emptystring");
+
+		while (true) {
+			String line1 = fpmodify.poll();
+			String operation = "MODIFY";
+
+			if (line1 == null) {
+				tree1.printInOrder();
+				break;
+			}
+			if (line1 != null)
+				helper1.printOutput(line1, operation);
+
+			//resultw.writeToFile();
+			//resultw.writeToStdout();
+		}
 	}
 
+
 }
+
+
+
