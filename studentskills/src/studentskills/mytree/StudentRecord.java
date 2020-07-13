@@ -1,24 +1,32 @@
 package studentskills.mytree;
 
+import studentskills.operation.Operation;
+
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
-public class StudentRecord extends Subject implements Cloneable, Observer {
-	public void setBnumber(int bnumber) {
-		this.bnumber = bnumber;
-	}
+/**
+ * student record acts as a node to insert in tree with field properties
+ *
+ */
+public class StudentRecord implements Cloneable, Observer, SubjectI, Comparable<StudentRecord> {
+	//to maintain a list of observers
+	private List<Observer> observers = new ArrayList<Observer>();
 
-	 int bnumber;
+	int bnumber;
 	String firstname, lastname;
-	 double gpa;
-	 String major;
+	double gpa;
+	String major;
 	Set<String> skills;
 
+    //constructor
 	public StudentRecord(int bnumber, String firstname, String lastname, double gpa, String major, String... skills) {
 		this(bnumber, firstname, lastname, gpa, major, new LinkedHashSet<String>(Arrays.asList(skills)));
 	}
-
+    //constructor
 	public StudentRecord(int bnumber, String firstname, String lastname, double gpa, String major, Set<String> skills) {
 		this.bnumber = bnumber;
 		this.firstname = firstname;
@@ -27,7 +35,7 @@ public class StudentRecord extends Subject implements Cloneable, Observer {
 		this.major = major;
 		this.skills = skills;
 	}
-
+    //getter and setter methods for every property
 	public int getBnumber() {
 		return bnumber;
 	}
@@ -52,6 +60,7 @@ public class StudentRecord extends Subject implements Cloneable, Observer {
 		return skills;
 	}
 
+	// creates a cloned copy of object
 	@Override
 	public Object clone() throws CloneNotSupportedException {
 		return new StudentRecord(bnumber, firstname, lastname, gpa, major, new LinkedHashSet<String>(skills));
@@ -68,9 +77,46 @@ public class StudentRecord extends Subject implements Cloneable, Observer {
 				", skills=" + skills +
 				'}';
 	}
+    //to update existing values to new values after a state change
+	@Override
+	public void update(StudentRecord record,Operation operation) {
+		if(operation.equals(Operation.INSERT)){
+			bnumber=record.bnumber;
+			firstname=record.firstname;
+			lastname=record.lastname;
+			gpa=record.gpa;
+			major=record.major;
+			skills=record.skills;
+		}
+
+
+	}
+    //to register listeners
+	@Override
+	public void register(StudentRecord record) {
+		try{
+			observers.add(record);
+		}catch(NullPointerException ex){
+			ex.printStackTrace();
+		}
+
+	}
 
 	@Override
-	public void update() {
+	public void unregister(StudentRecord record) {
 
+	}
+	// in case of state change notify corresponding listeners
+	@Override
+	public void notifyObserver(StudentRecord record,Operation operation) {
+		for(int i=0;i<observers.size();i++){
+			observers.get(i).update(record, operation);
+		}
+
+	}
+
+	@Override
+	public int compareTo(StudentRecord o) {
+		return Integer.compare(this.bnumber, o.bnumber);
 	}
 }

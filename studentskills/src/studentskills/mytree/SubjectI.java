@@ -1,9 +1,11 @@
 package studentskills.mytree;
 
+import studentskills.operation.Operation;
+
 public interface SubjectI{
 
-	public void register(Observer o);
-	public void unregister(Observer o);
-	public void notifyObserver();
+	void register(StudentRecord record);
+	void unregister(StudentRecord record);
+	void notifyObserver(StudentRecord record, Operation operation);
 
 }
