@@ -1,4 +1,4 @@
-# CSX42: Assignment 2
+# CSX42: Assignment 3
 **Name:Krupa Sawant
 **B-Number:B00 814013
 ** Use of 3 Slack Days
@@ -12,7 +12,7 @@ Note: build.xml is present in (./studentskills/src/) folder.
 ## Instruction to clean:
 
 ```commandline
-ant -buildfile channelpopularity/src/build.xml clean
+ant -buildfile studentkskills/src/build.xml clean
 ```
 
 Description: It cleans up all the .class files that were generated when you
@@ -21,14 +21,14 @@ compiled your code.
 ## Instructions to compile:
 
 ```commandline
-ant -buildfile channelpopularity/src/build.xml all
+ant -buildfile studentskills/src/build.xml all
 ```
 The above command compiles your code and generates .class files inside the BUILD folder.
 
 ## Instructions to run:
 
 ```commandline
-ant -buildfile channelpopularity/src/build.xml run -Dinput="input.txt" -Dmodify="modify.txt" -Dout1="output0.txt" -Dout2="output1.txt" -Dout3="output2.txt" -Derror="error.txt"
+ant -buildfile studentskills/src/build.xml run -Dinput="input.txt" -Dmodify="modify.txt" -Dout1="output0.txt" -Dout2="output1.txt" -Dout3="output2.txt" -Derror="error.txt"
 
 ```
 Note: Arguments accept the absolute path of the files.
