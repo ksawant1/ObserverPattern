@@ -80,18 +80,29 @@ public class StudentRecord implements Cloneable, Observer, SubjectI, Comparable<
     //to update existing values to new values after a state change
 	@Override
 	public void update(StudentRecord record,Operation operation) {
-		if(operation.equals(Operation.INSERT)){
-			bnumber=record.bnumber;
-			firstname=record.firstname;
-			lastname=record.lastname;
-			gpa=record.gpa;
-			major=record.major;
-			skills=record.skills;
+		if(operation.equals(Operation.INSERT)) {
+
+				this.firstname=record.firstname;
+				this.lastname=record.lastname;
+				this.major=record.major;
+				this.gpa=record.gpa;
+				this.getSkills().addAll(record.skills);
+				//tree1.inorder();
+
+		}
+		if(operation.equals(Operation.MODIFY)) {
+
+			this.firstname=record.firstname;
+			this.lastname=record.lastname;
+			this.major=record.major;
+			this.gpa=record.gpa;
+			this.getSkills().addAll(record.skills);
+			//tree1.inorder();
+
+
+		}
 		}
 
-
-	}
-    //to register listeners
 	@Override
 	public void register(StudentRecord record) {
 		try{
@@ -106,17 +117,19 @@ public class StudentRecord implements Cloneable, Observer, SubjectI, Comparable<
 	public void unregister(StudentRecord record) {
 
 	}
+
 	// in case of state change notify corresponding listeners
 	@Override
 	public void notifyObserver(StudentRecord record,Operation operation) {
-		for(int i=0;i<observers.size();i++){
+
+
+		for (int i = 0; i < observers.size(); i++) {
 			observers.get(i).update(record, operation);
 		}
-
 	}
 
 	@Override
 	public int compareTo(StudentRecord o) {
-		return Integer.compare(this.bnumber, o.bnumber);
+		return 0;
 	}
 }

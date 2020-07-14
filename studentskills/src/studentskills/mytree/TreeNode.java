@@ -31,9 +31,9 @@ public class TreeNode<K extends Comparable, V> {
 			return node;
 		}
 		/* Otherwise, recur down the tree */
-		if (node.key.compareTo(key) < 0) {
+		if (node.key.compareTo(key) > 0) {
 			node.left = insert(node.left, key, value);
-		} else if (node.key.compareTo(key) > 0)
+		} else if (node.key.compareTo(key) < 0)
 			node.right = insert(node.right, key, value);
 		else
 			node.value = value;

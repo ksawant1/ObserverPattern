@@ -41,6 +41,11 @@ public class Tree<K extends Comparable, V> {
 		inorder(root);
 	}
 
+	public String getInOrderTree() {
+		StringBuilder builder = new StringBuilder();
+		inorder(builder, root);
+		return builder.toString();
+	}
 	/**
 	 * A utility function to do inorder traversal of Tree and print the node value
 	 * @param node
@@ -55,6 +60,13 @@ public class Tree<K extends Comparable, V> {
 		}
 	}
 
+	private void inorder(StringBuilder builder,TreeNode node) {
+		if (node != null) {
+			inorder(builder, node.left);
+			builder.append(node.value);
+			inorder(builder, node.right);
+		}
+	}
 }
 
 
